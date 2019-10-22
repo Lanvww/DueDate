@@ -1,26 +1,50 @@
-
 // {type:class}
 // {generate:true}
 // {direction:topDown}
-// I've added so many extensions to UML, this is schuhML
+ 
 // Class symbols
 //   + : public
 //   - : internal (only accessible in the current assembly (default))
 //   I : interface (no implementations)
 //   A : abstract (must be inherited - cannot be instantiated)
 //   S : Sealed (cannot be inherited)
-
-
+ 
+ 
 // Member symbols
 //   +        : public (available to all classes)
 //   -        : private (only available to the current class (default))
 //   =        : protected (private to the current class and any derived class)
 //   $        : internal (private to all classes in the current assembly)
-//   :r       : read-only (property's get{} command only)
-//   :w      : write-only (property's set{} command only)
+//   :r       : read-only
 //   :a       : abstract (no implementing code)
 //   :v       : virtual (default implementation)
-//   :s       : static member (attached to the Class, not the Object - global)
-//   :i       : instance Class member (attached to the object (default))
-//   member field name will be capitalized if it is a property or indexer property
+//   :s       : static (attached to the Class, not the Object - global)
 //   :(0..*)  : array
+  
+[+DueDates|+sortedList:SortedList<DueDate>|+Remove(name:string,Time:DateTime)|()]1-0..*[+A:DueDate|+name:string;+Time:DateTime;+priority:int|+SetName():a;+SetDateTime():a;+SetPriority():a|();(name:string,Time:DateTime)]
+
+ 
+ [+A:DueDate]<-.-[+Deadline||+SetName();+SetDateTime();+SetPriority()|()]
+ [+A:DueDate]<-.-[+Meeting|+location:string|+SetName();+SetDateTime();+SetPriority();SetLocation()|()]
+ [+A:DueDate]<-.-[+Event||+SetName();+SetDateTime();+SetPriority()|()]
+
+[+I:IMeeting||SetLocation()]^[+Meeting]
+ 
+[+I:IDeadline]^[+Deadline]
+
+[+I:IEvent]^[+Event]
+
+[+Deadline]<-.-[+Exam||]
+[+Deadline]<-.-[+Homework||]
+
+[+Meeting]<-.-[+TeacherMeetings||]
+[+Meeting]<-.-[+GroupMeeting||]
+[+Meeting]<-.-[+ClubMeeting||]
+
+[+Event]<-.-[+SocialEvents||]
+[+Event]<-.-[+SchoolEvents||]
+[+Event]<-.-[+ClubEvents||]
+
+[+A:DueDate]1-1[+Schedule|+deadline:DateTime;+dayOfWeek:List<DayOfWeek>|]
+
+
